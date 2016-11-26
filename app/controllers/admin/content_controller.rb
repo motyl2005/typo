@@ -113,6 +113,29 @@ class Admin::ContentController < Admin::BaseController
     render :text => nil
   end
 
+  def merger
+    
+    isNotValid = ->(x) { x.nil? || x.empty? || x !~ /^[0-9]*$/ } #|| x.empty? || x != /^[0-9]*$/
+    unless isNotValid.call(params[:merge_with]) || isNotValid.call(params[:toID])
+      to_id = params[:toID].to_i
+      from_id = params[:merge_with].to_i
+      if to_id != from_id
+        to_article = Content.find_by_id(to_id)
+        from_article = Content.find_by_id(from_id)
+        unless from_article.nil? || to_article.nil?
+          to_article.body += "\n#{from_article.body}"
+          to_article.save
+          Feedback.where(article_id: from_id).update_all(article_id: to_id)
+          from_article.destroy
+        end
+      end
+      redirect_to :action => 'edit', id: params[:toID]
+    end
+    
+  end
+  
+  
+  
   protected
 
   def get_fresh_or_existing_draft_for_article

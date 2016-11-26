@@ -4,3 +4,5 @@
   <%= render :partial => "form" %>
 
 <% end %>
+
+<%= render 'admin/content/merge', {:hidden => @current_user.profile_id != 1 || @_action_name != 'edit', form_action: form_action} %> 

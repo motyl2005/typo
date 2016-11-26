@@ -1,0 +1,11 @@
+<% unless hidden %>
+    <div class=''>
+        <%= form_tag(admin_content_merger_path, remote: true) do %>
+            <h4>Merge Articles</h4>
+            Article ID
+            <%= text_field_tag :merge_with, nil, placeholder: 'Enter the ID of article to merge with', maxlength: '3', size: '10', autocomplete: 'off', required: true %><br>
+            <%= hidden_field_tag :toID, params[:id] %>
+            <%= submit_tag 'Merge', class: 'btn info', id: :mergeBtn, data: {disable_with: "Submitting..."} %>
+        <% end %>    
+    </div>
+<% end %>
